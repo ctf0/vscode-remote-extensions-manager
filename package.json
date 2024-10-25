@@ -1,0 +1,120 @@
+{
+    "name": "vscode-remote-extensions-manager",
+    "displayName": "Remote - SSH: Extensions Manager",
+    "description": "Manage extensions for remote SSH development",
+    "version": "0.0.1",
+    "publisher": "ctf0",
+    "author": "ctf0",
+    "repository": "https://github.com/ctf0/vscode-remote-extensions-manager",
+    "icon": "img/icon.png",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./out/main",
+    "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Remote Extensions Manager",
+            "properties": {
+                "remoteExtensionsManager.truncateLength": {
+                    "type": "number",
+                    "default": 30,
+                    "description": "truncate long extension names to this length"
+                }
+            }
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "remote-extensions-manager",
+                    "title": "Remote Extensions Manager",
+                    "icon": "img/file.svg"
+                }
+            ]
+        },
+        "views": {
+            "remote-extensions-manager": [
+                {
+                    "id": "remoteExtensionsManager",
+                    "name": "Remote Extensions Manager"
+                }
+            ]
+        },
+        "commands": [
+            {
+                "command": "remoteExtensionsManager.toggleExtension",
+                "title": "Toggle Extension",
+                "icon": "$(remote-explorer-view-icon)"
+            },
+            {
+                "command": "remoteExtensionsManager.refresh",
+                "title": "Refresh Extensions List",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "list.find",
+                "title": "Find Extension",
+                "icon": "$(search)"
+            },
+            {
+                "command": "remoteExtensionsManager.showExtension",
+                "title": "Lookup Extension"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "remoteExtensionsManager.showExtension",
+                    "when": "false"
+                },
+                {
+                    "command": "remoteExtensionsManager.toggleExtension",
+                    "when": "false"
+                },
+                {
+                    "command": "remoteExtensionsManager.refresh",
+                    "when": "false"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "remoteExtensionsManager.refresh",
+                    "when": "view == remoteExtensionsManager",
+                    "group": "navigation"
+                },
+                {
+                    "command": "list.find",
+                    "when": "view == remoteExtensionsManager",
+                    "group": "navigation"
+                }
+            ],
+            "view/item/context": [
+                {
+                    "command": "remoteExtensionsManager.toggleExtension",
+                    "when": "view == remoteExtensionsManager && viewItem == extension",
+                    "group": "inline"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run esbuild-base -- --pure:console.log --minify",
+        "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+        "esbuild": "npm run esbuild-base -- --sourcemap",
+        "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+        "watch": "npm run esbuild"
+    },
+    "devDependencies": {
+        "@types/node": "^22.7.9",
+        "@types/vscode": "^1.85.0",
+        "esbuild": "^0.24.0",
+        "typescript": "^5.6.3"
+    },
+    "dependencies": {}
+}
